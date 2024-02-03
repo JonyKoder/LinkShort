@@ -39,7 +39,10 @@ namespace Application.LinkInfo
 
         public async Task Create(Link link)
         {
-            var linkEntity = new Link(link.Code, link.Url);
+            var linkEntity = new Link();
+            linkEntity.AddCode(link.Code);
+            linkEntity.SetLongUrl(link.LongUrl);
+            linkEntity.SetShortUrl(link.ShortUrl);
             await _dbContext.Links.AddAsync(linkEntity);
             await _dbContext.SaveChangesAsync();
         }
@@ -50,7 +53,9 @@ namespace Application.LinkInfo
             if (linkEntity == null)
                 return;
 
-            linkEntity.AddUrlAndCode(link.Code, link.Url);
+            linkEntity.AddCode(link.Code);
+            linkEntity.SetLongUrl(link.LongUrl);
+            linkEntity.SetShortUrl(link.ShortUrl);
 
             _dbContext.Links.Update(linkEntity);
             await _dbContext.SaveChangesAsync();

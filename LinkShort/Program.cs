@@ -14,7 +14,7 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-// Add DbContext
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
@@ -31,7 +31,15 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.MapGet("api/{code}", async (string code, AppDbContext dbContext) =>
+{
+    var shortUrl = await dbContext.Links.FirstOrDefaultAsync(x => x.Code == code);
+    if(shortUrl is null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Redirect(shortUrl.LongUrl);
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

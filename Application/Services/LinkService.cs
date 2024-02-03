@@ -11,6 +11,9 @@ namespace Application.Services
 {
     public class LinkService : ILinkService
     {
+        private const int NumberOfChars = 7;
+        private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\nabcdefghijklmnopqrstuvwxyz0123456789";
+        private readonly Random _random = new Random();
         private readonly ILinkRepository _linkRepository;
 
         public LinkService(ILinkRepository linkRepository)
@@ -20,13 +23,28 @@ namespace Application.Services
 
         public async Task Create(LinkDto link)
         {
-            var linkEntity = new Link(link.Code, link.Url);
+            var linkEntity = new Link();
+            linkEntity.AddCode(link.Code);
+            linkEntity.SetLongUrl(link.LongUrl);
+            linkEntity.SetShortUrl(link.ShortUrl);
             await _linkRepository.Create(linkEntity);
         }
 
         public async Task Delete(Guid id)
         {
             await _linkRepository.Delete(id);
+        }
+
+        public string GenerateUniqueCode()
+        {
+            var codeChars = new char[NumberOfChars];
+            for (int i = 0; i < NumberOfChars; i++)
+            {
+                var randomIndex = _random.Next(Alphabet.Length - 1);
+                codeChars[i] = Alphabet[randomIndex];
+            }
+            var code = new string(codeChars).Trim();
+            return code;
         }
 
         public async Task<IEnumerable<LinkDto>> GetAll()
@@ -36,7 +54,8 @@ namespace Application.Services
             {
                 Id = link.Id,
                 Code = link.Code,
-                Url = link.Url
+                ShortUrl = link.ShortUrl,
+                LongUrl = link.LongUrl
             });
         }
 
@@ -50,7 +69,8 @@ namespace Application.Services
             {
                 Id = link.Id,
                 Code = link.Code,
-                Url = link.Url
+                ShortUrl = link.ShortUrl,
+                LongUrl = link.LongUrl
             };
         }
 
@@ -60,7 +80,9 @@ namespace Application.Services
             if (linkEntity == null)
                 return;
 
-            linkEntity.AddUrlAndCode(link.Code, link.Url);
+            linkEntity.AddCode(link.Code);
+            linkEntity.SetLongUrl(link.LongUrl);
+            linkEntity.SetShortUrl(link.ShortUrl);
 
             await _linkRepository.Update(linkEntity);
         }

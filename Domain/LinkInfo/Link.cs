@@ -8,20 +8,25 @@ namespace Domain.LinkInfo
 {
     public class Link
     {
-        public Link(string code, string url)
-        {
-            Code = code;
-            Url = url;
-        }
 
         public Guid Id { get; set; }
-        public virtual string Code { get; protected set; }
-        public virtual string Url { get; protected set; }
+        public string Code { get; protected set; }
+        public string LongUrl { get; protected set; }
+        public string ShortUrl { get; protected set; }
 
-        public void AddUrlAndCode(string code, string url)
+        public void AddCode(string code)
         {
             Code = code;
-            Url = url;
+        }
+
+        public void SetLongUrl(string longUrl)
+        {
+            LongUrl = longUrl;
+        }
+
+        public void SetShortUrl(string shortUrl)
+        {
+            ShortUrl = shortUrl;
         }
     }
 }

@@ -10,9 +10,8 @@ namespace DTO.LinkInfo
     public class LinkDto
     {
         public Guid Id { get; set; }
-        public string Code { get; set; }
-        [Required(ErrorMessage = "Введите ссылку")]
-        [RegularExpression(@"https?:\/\/[a-zA-Z0-9.\/]+.[a-z]*[a-zA-Z0-9.\/_?=%\-\&]*", ErrorMessage = "Введите корректный Url")]
-        public  string Url { get; set; }
+        public string Code { get;  set; }
+        public string LongUrl { get;  set; }
+        public string ShortUrl { get;  set; }
     }
 }

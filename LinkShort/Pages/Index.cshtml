@@ -1,7 +1,6 @@
 ﻿@page
 @model IndexModel
 @{
-    var shortUrlBase = $"{Request.Scheme}://{Request.Host.Value}/";
     ViewData["Title"] = "Сократитель ссылок";
 }
 
@@ -50,8 +49,20 @@
 <h1>Сократитель ссылок</h1>
 
 <form method="post">
-    <input type="text" name="url" placeholder="Введите ссылку для сокращения" />
-    <button type="submit">Добавить ссылку</button>
+    <input type="text" asp-for="@Model.LinkVM.Url" placeholder="Введите ссылку для сокращения" />
+    <button type="submit" id="addLinkButton" style="display: none;">Сократить ссылку</button>
+    <script>
+        const input = document.querySelector('input');
+        const addButton = document.querySelector('#addLinkButton');
+
+        input.addEventListener('input', function () {
+            if (input.value.trim() !== '') {
+                addButton.style.display = 'block';
+            } else {
+                addButton.style.display = 'none';
+            }
+        });
+    </script>
 </form>
 
 @if (Model.Links != null && Model.Links.Any())
@@ -67,8 +78,8 @@
             @foreach (var item in Model.Links)
             {
                 <tr>
-                    <td><a href="@item.Url"  target="_blank">@((item.Url.Length > 50) ? item.Url.Substring(0, 50) + "..." : item.Url)</a></td>
-                    <td><a href="@item.Url" target="_blank">@shortUrlBase@item.Code</a></td>
+                    <td><a href="@item.LongUrl"  target="_blank">@((item.LongUrl.Length > 50) ? item.LongUrl.Substring(0, 50) + "..." : item.LongUrl)</a></td>
+                    <td><a href="@item.ShortUrl" target="_blank">@item.ShortUrl</a></td>
                 </tr>
             }
         </tbody>

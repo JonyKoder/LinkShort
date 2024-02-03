@@ -1,12 +1,11 @@
-﻿using Application.Interfaces;
-using DTO.LinkInfo;
+﻿using DTO.LinkInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Interfaces
 {
     public interface ILinkService
     {
@@ -15,5 +14,6 @@ namespace Application.Services
         Task<IEnumerable<LinkDto>> GetAll();
         Task Update(LinkDto link);
         Task<LinkDto> GetById(Guid id);
+        string GenerateUniqueCode();
     }
 }

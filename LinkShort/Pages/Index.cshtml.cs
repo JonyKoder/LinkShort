@@ -1,7 +1,8 @@
-using Application.Services;
+using Application.Interfaces;
 using DTO.LinkInfo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -18,21 +19,22 @@ namespace LinkShort.Pages
             _linkService = linkService;
         }
 
-        public List<LinkDto> Links { get; private set; }
+        public List<LinkDto> Links { get;  set; }
+        [BindProperty] public LinkVM LinkVM { get;  set; }
 
         public async Task OnGet()
         {
-
+            LinkVM = new LinkVM();
             var allShortLinks = await _linkService.GetAll();
             Links = allShortLinks.ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(string url)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (!string.IsNullOrEmpty(url))
+            if (!string.IsNullOrEmpty(LinkVM.Url))
             {
-          
-                var linkDto = new LinkDto { Url = url, Code = GetShortCode(url) };
+                var code = _linkService.GenerateUniqueCode();
+                var linkDto = new LinkDto { LongUrl = LinkVM.Url, Code = code, ShortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/{code}" };
 
             
                 await _linkService.Create(linkDto);
@@ -51,5 +53,11 @@ namespace LinkShort.Pages
             }
         }
 
+    }
+    public class LinkVM
+    {
+        [Required(ErrorMessage = "¬ведите ссылку")]
+        [RegularExpression(@"https?:\/\/[a-zA-Z0-9.\/]+.[a-z]*[a-zA-Z0-9.\/_?=%\-\&]*", ErrorMessage = "¬ведите корректный Url")]
+        public string Url { get; set; }
     }
 }
