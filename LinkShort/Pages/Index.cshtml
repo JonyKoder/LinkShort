@@ -1,0 +1,81 @@
+﻿@page
+@model IndexModel
+@{
+    var shortUrlBase = $"{Request.Scheme}://{Request.Host.Value}/";
+    ViewData["Title"] = "Сократитель ссылок";
+}
+
+<style>
+    /* Стилизация заголовка */
+    h1 {
+        color: blue;
+        font-size: 24px;
+    }
+
+    /* Стилизация формы */
+    form {
+        margin-top: 20px;
+    }
+
+    /* Стилизация текстового поля */
+    input[type="text"] {
+        width: 300px;
+        padding: 5px;
+        border: 1px solid gray;
+        border-radius: 5px;
+    }
+
+    /* Стилизация кнопки */
+    button[type="submit"] {
+        padding: 5px 10px;
+        background-color: blue;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Стилизация блока с результатом */
+    .result {
+        margin-top: 20px;
+    }
+
+        /* Стилизация ссылки */
+        .result a {
+            color: blue;
+            text-decoration: none;
+        }
+</style>
+
+<h1>Сократитель ссылок</h1>
+
+<form method="post">
+    <input type="text" name="url" placeholder="Введите ссылку для сокращения" />
+    <button type="submit">Добавить ссылку</button>
+</form>
+
+@if (Model.Links != null && Model.Links.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Длинный Url</td>
+                <td>Короткий Url</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Links)
+            {
+                <tr>
+                    <td><a href="@item.Url"  target="_blank">@((item.Url.Length > 50) ? item.Url.Substring(0, 50) + "..." : item.Url)</a></td>
+                    <td><a href="@item.Url" target="_blank">@shortUrlBase@item.Code</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3>Вы ещё не добавили ни одной ссылки!<br />Нажмите на кнопку "Добавить ссылку"</h3>
+}
+
