@@ -25,7 +25,7 @@ namespace LinkShort.Pages
         public async Task OnGet()
         {
             LinkVM = new LinkVM();
-            var allShortLinks = await _linkService.GetAll();
+            var allShortLinks = await _linkService.GetAllAsync();
             Links = allShortLinks.ToList();
         }
 
@@ -37,20 +37,10 @@ namespace LinkShort.Pages
                 var linkDto = new LinkDto { LongUrl = LinkVM.Url, Code = code, ShortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/{code}" };
 
             
-                await _linkService.Create(linkDto);
+                await _linkService.CreateAsync(linkDto);
             }
 
             return RedirectToPage("/Index");
-        }
-
-        private string GetShortCode(string url)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(url));
-                string hash = BitConverter.ToString(bytes).Replace("-", "").Substring(0, 8);
-                return hash;
-            }
         }
 
     }

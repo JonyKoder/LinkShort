@@ -31,14 +31,14 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.MapGet("api/{code}", async (string code, AppDbContext dbContext) =>
+app.MapGet("api/{code}", async (string code, ILinkService service) =>
 {
-    var shortUrl = await dbContext.Links.FirstOrDefaultAsync(x => x.Code == code);
-    if(shortUrl is null)
+    var link = await service.GetByCodeAsync(code);
+    if(link is null)
     {
         return Results.NotFound();
     }
-    return Results.Redirect(shortUrl.LongUrl);
+    return Results.Redirect(link.LongUrl);
 });
 app.UseHttpsRedirection();
 app.UseStaticFiles();

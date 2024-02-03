@@ -9,11 +9,12 @@ namespace Application.Interfaces
 {
     public interface ILinkService
     {
-        Task Create(LinkDto link);
-        Task Delete(Guid id);
-        Task<IEnumerable<LinkDto>> GetAll();
-        Task Update(LinkDto link);
-        Task<LinkDto> GetById(Guid id);
+        Task CreateAsync(LinkDto link);
+        Task DeleteAsync(Guid id);
+        Task<IEnumerable<LinkDto>> GetAllAsync();
+        Task UpdateAsync(LinkDto link);
+        Task<LinkDto> GetByIdAsync(Guid id);
+        Task<LinkDto> GetByCodeAsync(string code);
         string GenerateUniqueCode();
     }
 }

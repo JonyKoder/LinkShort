@@ -4,67 +4,17 @@
     ViewData["Title"] = "Сократитель ссылок";
 }
 
-<style>
-    /* Стилизация заголовка */
-    h1 {
-        color: blue;
-        font-size: 24px;
-    }
-
-    /* Стилизация формы */
-    form {
-        margin-top: 20px;
-    }
-
-    /* Стилизация текстового поля */
-    input[type="text"] {
-        width: 300px;
-        padding: 5px;
-        border: 1px solid gray;
-        border-radius: 5px;
-    }
-
-    /* Стилизация кнопки */
-    button[type="submit"] {
-        padding: 5px 10px;
-        background-color: blue;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    /* Стилизация блока с результатом */
-    .result {
-        margin-top: 20px;
-    }
-
-        /* Стилизация ссылки */
-        .result a {
-            color: blue;
-            text-decoration: none;
-        }
-</style>
 
 <h1>Сократитель ссылок</h1>
-
+@section scripts {
+    <script src="./js/site.js"></script>
+    <style src="./css/site.css"></style>
+}
 <form method="post">
     <input type="text" asp-for="@Model.LinkVM.Url" placeholder="Введите ссылку для сокращения" />
     <button type="submit" id="addLinkButton" style="display: none;">Сократить ссылку</button>
-    <script>
-        const input = document.querySelector('input');
-        const addButton = document.querySelector('#addLinkButton');
-
-        input.addEventListener('input', function () {
-            if (input.value.trim() !== '') {
-                addButton.style.display = 'block';
-            } else {
-                addButton.style.display = 'none';
-            }
-        });
-    </script>
 </form>
-
+<h3>История сокращений</h3>
 @if (Model.Links != null && Model.Links.Any())
 {
     <table class="table table-bordered">
@@ -78,7 +28,7 @@
             @foreach (var item in Model.Links)
             {
                 <tr>
-                    <td><a href="@item.LongUrl"  target="_blank">@((item.LongUrl.Length > 50) ? item.LongUrl.Substring(0, 50) + "..." : item.LongUrl)</a></td>
+                    <td><a href="@item.LongUrl" target="_blank">@((item.LongUrl.Length > 50) ? item.LongUrl.Substring(0, 50) + "..." : item.LongUrl)</a></td>
                     <td><a href="@item.ShortUrl" target="_blank">@item.ShortUrl</a></td>
                 </tr>
             }
@@ -89,4 +39,3 @@ else
 {
     <h3>Вы ещё не добавили ни одной ссылки!<br />Нажмите на кнопку "Добавить ссылку"</h3>
 }
-

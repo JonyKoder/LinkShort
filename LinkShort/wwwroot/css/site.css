@@ -20,3 +20,42 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* Стилизация заголовка */
+h1 {
+    color: blue;
+    font-size: 24px;
+}
+
+/* Стилизация формы */
+form {
+    margin-top: 20px;
+}
+
+/* Стилизация текстового поля */
+input[type="text"] {
+    width: 300px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+/* Стилизация кнопки */
+button[type="submit"] {
+    padding: 5px 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Стилизация блока с результатом */
+.result {
+    margin-top: 20px;
+}
+
+    /* Стилизация ссылки */
+    .result a {
+        color: blue;
+        text-decoration: none;
+    }

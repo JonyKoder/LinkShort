@@ -21,7 +21,7 @@ namespace Application.Services
             _linkRepository = linkRepository;
         }
 
-        public async Task Create(LinkDto link)
+        public async Task CreateAsync(LinkDto link)
         {
             var linkEntity = new Link();
             linkEntity.AddCode(link.Code);
@@ -30,7 +30,7 @@ namespace Application.Services
             await _linkRepository.Create(linkEntity);
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await _linkRepository.Delete(id);
         }
@@ -47,7 +47,7 @@ namespace Application.Services
             return code;
         }
 
-        public async Task<IEnumerable<LinkDto>> GetAll()
+        public async Task<IEnumerable<LinkDto>> GetAllAsync()
         {
             var links = await _linkRepository.GetAll();
             return links.Select(link => new LinkDto
@@ -59,7 +59,22 @@ namespace Application.Services
             });
         }
 
-        public async Task<LinkDto> GetById(Guid id)
+        public async Task<LinkDto> GetByCodeAsync(string code)
+        {
+            var link = (await _linkRepository.GetAll()).FirstOrDefault(x => x.Code.Contains(code));
+            if (link == null)
+                return null;
+
+            return new LinkDto
+            {
+                Id = link.Id,
+                Code = link.Code,
+                ShortUrl = link.ShortUrl,
+                LongUrl = link.LongUrl
+            };
+        }
+
+        public async Task<LinkDto> GetByIdAsync(Guid id)
         {
             var link = await _linkRepository.GetById(id);
             if (link == null)
@@ -74,7 +89,7 @@ namespace Application.Services
             };
         }
 
-        public async Task Update(LinkDto link)
+        public async Task UpdateAsync(LinkDto link)
         {
             var linkEntity = await _linkRepository.GetById(link.Id);
             if (linkEntity == null)
