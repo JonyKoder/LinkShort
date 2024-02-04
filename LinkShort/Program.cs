@@ -1,6 +1,6 @@
 using Application.Interfaces;
 using Application.LinkInfo;
-using Application.Services;
+using Application.Repositoryes;
 using EntityFramework;
 using Microsoft.EntityFrameworkCore;
 

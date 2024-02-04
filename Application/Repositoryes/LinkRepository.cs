@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.LinkInfo
+namespace Application.Repositoryes
 {
     //В крупном проекте я бы использовал AutoMapper тут мало полей, я решил вручную привести типы
     public class LinkRepository : ILinkRepository
